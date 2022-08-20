@@ -195,6 +195,52 @@ class Vegan_Cockpit_Admin {
     return $tag;
 }
 
+public function angular(){
+
+		add_submenu_page(
+			'vegan-cockpit-options',
+			'Angular',
+			'Angular',
+			'manage_options',
+			'vegan-cockpit-angular',
+			array( $this, 'angular_html' ),
+			'1',
+			'dashicons-book-alt'
+	);
+
+}
+
+public function angular_html(){
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+	}
+
+	wp_enqueue_style( "angular-styles", plugin_dir_url( __FILE__ ) . 'css/angular/styles.css', array(), $this->version, 'all' );
+	//wp_enqueue_style('angular/styles.css');
+	wp_register_style( 'bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css' );
+	wp_enqueue_style('bootstrap-css');
+
+	wp_enqueue_script( 'angular-main', plugin_dir_url( __FILE__ ) . 'js/angular/main.61b2e52cea62cca44bbc.js');
+	wp_enqueue_script( 'angular-polyfill', plugin_dir_url( __FILE__ ) . 'js/angular/polyfills.9352cc625e6dc3cc9e0d.js');
+	wp_enqueue_script( 'angular-runtime', plugin_dir_url( __FILE__ ) . 'js/angular/runtime.6aa0e0ce826917bde384.js');
+	wp_enqueue_script( 'angular-scripts', plugin_dir_url( __FILE__ ) . 'js/angular/scripts.2e884fea37b528c08d5a.js');
+
+
+	foreach( glob( plugin_dir_url( __FILE__ ) . '/js/angular/*.js' ) as $file ) {
+		// $file contains the name and extension of the file
+		echo "something";
+		wp_enqueue_script( $file, get_template_directory_uri().'/js/angular/'.$file);
+	}
+
+	?>
+		<?php
+			include( plugin_dir_path( __FILE__ ) . 'partials/angular.php');
+		?>
+	<?php
+}
+
+
 	public function categories(){
 
 			add_submenu_page(
