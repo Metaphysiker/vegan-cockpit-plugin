@@ -18,16 +18,9 @@
   <div class="container">
     <p class="g-signin2" data-onsuccess="queryReports">
     </p>
-    <div id="data-google-view-id" data-google-view-id="235111240">
-      235111240
-    </div>
-
-    <div id="testicus">
-      swag yolo
-    </div>
   </div>
 
-  <div data-google-view-id=
+  <div id="data-google-view-id" data-google-view-id=
   <?php
   echo get_option( 'vegan_cockpit_setting' )["google_view_id"];
   ?>
