@@ -221,10 +221,10 @@ public function angular_html(){
 	wp_register_style( 'bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css' );
 	wp_enqueue_style('bootstrap-css');
 
-	wp_enqueue_script( 'angular-main', plugin_dir_url( __FILE__ ) . 'js/angular/main.61b2e52cea62cca44bbc.js');
-	wp_enqueue_script( 'angular-polyfill', plugin_dir_url( __FILE__ ) . 'js/angular/polyfills.9352cc625e6dc3cc9e0d.js');
-	wp_enqueue_script( 'angular-runtime', plugin_dir_url( __FILE__ ) . 'js/angular/runtime.6aa0e0ce826917bde384.js');
-	wp_enqueue_script( 'angular-scripts', plugin_dir_url( __FILE__ ) . 'js/angular/scripts.2e884fea37b528c08d5a.js');
+	wp_enqueue_script( 'angular-main', plugin_dir_url( __FILE__ ) . 'js/angular/main.js');
+	wp_enqueue_script( 'angular-polyfill', plugin_dir_url( __FILE__ ) . 'js/angular/polyfills.js');
+	wp_enqueue_script( 'angular-runtime', plugin_dir_url( __FILE__ ) . 'js/angular/runtime.js');
+	wp_enqueue_script( 'angular-scripts', plugin_dir_url( __FILE__ ) . 'js/angular/scripts.js');
 
 
 	foreach( glob( plugin_dir_url( __FILE__ ) . '/js/angular/*.js' ) as $file ) {
