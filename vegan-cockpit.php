@@ -16,7 +16,7 @@
  * Plugin Name:       Vegan Cockpit
  * Plugin URI:        https://www.philosophische-insel.ch/
  * Description:       Vegan Cockpit - Google Analytics with Wordpress Categories
- * Version:           1.0.3
+ * Version:           1.0.4
  * Author:            Sandro Räss
  * Author URI:        https://www.philosophische-insel.ch/
  * License:           GPL-2.0+
