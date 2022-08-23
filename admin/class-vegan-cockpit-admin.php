@@ -131,6 +131,14 @@ class Vegan_Cockpit_Admin {
 				'vegan_cockpit_settings_section'
 		);
 
+		add_settings_field(
+				'payrexx_api_key',
+				'Payrexx Api Key',
+				array( $this, 'payrexx_api_key_html' ),
+				'vegan_cockpit',
+				'vegan_cockpit_settings_section'
+		);
+
 	}
 
 	public function vegan_cockpit_settings_section_callback() {
@@ -145,6 +153,11 @@ class Vegan_Cockpit_Admin {
 	public function google_view_id_html() {
 		$options = get_option( 'vegan_cockpit_setting' );
 		echo "<input id='google_view_id' name='vegan_cockpit_setting[google_view_id]' type='text' value='" . esc_attr( $options['google_view_id'] ) . "' />";
+	}
+
+	public function payrexx_api_key_html() {
+		$options = get_option( 'vegan_cockpit_setting' );
+		echo "<input id='payrexx_api_key' name='vegan_cockpit_setting[payrexx_api_key]' type='text' value='" . esc_attr( $options['payrexx_api_key'] ) . "' />";
 	}
 
 	public function options_page(){

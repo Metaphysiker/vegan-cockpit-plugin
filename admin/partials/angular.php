@@ -30,6 +30,16 @@
     ?>
   </div>
 
+  <div id="data-payrexx-api-key" data-payrexx-api-key=
+  <?php
+  echo get_option( 'vegan_cockpit_setting' )["payrexx_api_key"];
+  ?>
+  >
+    <?php
+    echo get_option( 'vegan_cockpit_setting' )["payrexx_api_key"];
+    ?>
+  </div>
+
   <app-root></app-root>
 
 </body></html>
