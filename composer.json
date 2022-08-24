@@ -1,0 +1,12 @@
+{
+    "name": "sandro/vegan-cockpit-plugin",
+    "authors": [
+        {
+            "name": "Metaphysiker",
+            "email": "s.raess@me.com"
+        }
+    ],
+    "require": {
+      "payrexx/payrexx": "dev-master"
+    }
+}

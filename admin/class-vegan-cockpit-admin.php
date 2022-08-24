@@ -160,6 +160,113 @@ class Vegan_Cockpit_Admin {
 		echo "<input id='payrexx_api_key' name='vegan_cockpit_setting[payrexx_api_key]' type='text' value='" . esc_attr( $options['payrexx_api_key'] ) . "' />";
 	}
 
+	#payrexx
+	public function register_get_payrexx_transactions_route() {
+		register_rest_route( 'vegan_cockpit/v1', '/get_payrexx_transactions/(?P<offset>\d+)/(?P<limit>\d+)/(?P<start_date>[^/]+)/(?P<end_date>[^/]+)', array(
+		'methods' => 'GET',
+		'callback' => array( $this, 'get_payrexx_transactions' ),
+	) );
+	}
+
+	public function get_payrexx_transactions( $data ) {
+		// $instanceName is a part of the url where you access your payrexx installation.
+		// https://{$instanceName}.payrexx.com
+		$instanceName = 'veganegesellschaftschweiz';
+
+		// $secret is the payrexx secret for the communication between the applications
+		// if you think someone got your secret, just regenerate it in the payrexx administration
+		$secret = '23zkRkQAjcjlJdENtbysNI2lueYRIM';
+
+		$result = "whut?";
+
+		$final_array = [];
+
+		$payrexx = new \Payrexx\Payrexx($instanceName, $secret);
+
+		$start_date = "2022-01-01 00:00:00";
+		$end_date = "2022-06-01 23:59:59";
+
+		if (isset($data["start_date"])) {
+			$start_date = $data["start_date"] . " 00:00:00";
+		}
+
+		if (isset($data["end_date"])) {
+			$end_date = $date["end_date"] . " 23:59:59";
+		}
+
+		$transaction = new \Payrexx\Models\Request\Transaction();
+		$transaction->setFilterDatetimeUtcGreaterThan(new \DateTime($start_date));
+		$transaction->setFilterDatetimeUtcLessThan(new \DateTime($end_date));
+		$transaction->setOffset($data['offset']);
+		$transaction->setLimit($data['limit']);
+
+		try {
+		    $transactions = $payrexx->getAll($transaction);
+		   //var_dump($transactions);
+
+			 foreach ($transactions as &$transaction) {
+				 var_dump($transaction);
+
+			 	$single_transaction = [];
+
+				$single_transaction["amount"] = $transaction-> getAmount();
+				$single_transaction["user_id"] = $transaction-> contact["id"];
+				$single_transaction["firstname"] = $transaction-> contact["firstname"];
+				$single_transaction["lastname"] = $transaction-> contact["lastname"];
+				$single_transaction["time"] = $transaction-> getTime();
+
+				$products_string = "";
+				foreach ($transaction -> invoice["products"] as &$product) {
+					$products_string = $products_string . " " . $product["name"];
+				}
+				unset($product);
+				$single_transaction["products"] = $products_string;
+
+
+				$final_array[$transaction-> getId()] = $single_transaction;
+			}
+			unset($transaction);
+		} catch (\Payrexx\PayrexxException $e) {
+		   //print $e->getMessage();
+		}
+
+		//$age = array("Peter"=>35, "Ben"=>37, "Joe"=>43);
+		//return json_encode($age);
+		//return json_encode($result);
+
+		//foreach($result as $transaction) {
+		 //   echo $transaction->id;
+		//}
+
+		return $final_array;
+
+	}
+
+	public function register_payrexx_route() {
+		register_rest_route( 'vegan_cockpit/v1', '/author/(?P<id>\d+)', array(
+		'methods' => 'GET',
+		'callback' => array( $this, 'my_awesome_func' ),
+	) );
+	}
+
+	public function my_awesome_func( $data ) {
+
+		#if ( ! current_user_can( 'manage_options' ) ) {
+		#		return "not allowed";
+		#}
+
+
+	  $posts = get_posts( array(
+	    'author' => $data['id'],
+	  ) );
+
+	  if ( empty( $posts ) ) {
+	    return null;
+	  }
+
+	  return $posts[0]->post_title;
+	}
+
 	public function options_page(){
 
 			add_menu_page(

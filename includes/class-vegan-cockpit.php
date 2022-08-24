@@ -104,6 +104,8 @@ class Vegan_Cockpit {
 		 * core plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-vegan-cockpit-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
+		#	require_once dirname(__FILE__).'/vendor/autoload.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
@@ -162,6 +164,9 @@ class Vegan_Cockpit {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'categories' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'angular' );
 		//$this->loader->add_action( 'admin_menu', $plugin_admin, 'categories' );
+
+		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'register_payrexx_route' );
+		$this->loader->add_action( 'rest_api_init', $plugin_admin, 'register_get_payrexx_transactions_route' );
 
 
 
