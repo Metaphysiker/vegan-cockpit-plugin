@@ -205,7 +205,7 @@ class Vegan_Cockpit_Admin {
 		   //var_dump($transactions);
 
 			 foreach ($transactions as &$transaction) {
-				 var_dump($transaction);
+				 //var_dump($transaction);
 
 			 	$single_transaction = [];
 
@@ -238,7 +238,8 @@ class Vegan_Cockpit_Admin {
 		 //   echo $transaction->id;
 		//}
 
-		return $final_array;
+		$array_final_array = array($final_array);
+		return rest_ensure_response($array_final_array);
 
 	}
 
