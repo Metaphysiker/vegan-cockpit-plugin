@@ -40,6 +40,28 @@
     ?>
   </div>
 
+  <div id="data_wordpress_json_endpoint" data_wordpress_json_endpoint=
+  <?php
+  echo get_option( 'vegan_cockpit_setting' )["wordpress_json_endpoint"];
+  ?>
+  >
+    <?php
+    echo get_option( 'vegan_cockpit_setting' )["wordpress_json_endpoint"];
+    ?>
+  </div>
+
+  <div id="data-wordpress-nonce" data-wordpress-nonce=
+  <?php
+  echo wp_create_nonce( 'wp_rest' );
+  ?>
+  >
+    <?php
+    echo wp_create_nonce( 'wp_rest' );
+    ?>
+  </div>
+
+
+
   <app-root></app-root>
 
 </body></html>

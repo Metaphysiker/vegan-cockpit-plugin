@@ -139,6 +139,14 @@ class Vegan_Cockpit_Admin {
 				'vegan_cockpit_settings_section'
 		);
 
+		add_settings_field(
+				'wordpress_json_endpoint',
+				'Wordpress Json Endpoint',
+				array( $this, 'wordpress_json_endpoint_html' ),
+				'vegan_cockpit',
+				'vegan_cockpit_settings_section'
+		);
+
 	}
 
 	public function vegan_cockpit_settings_section_callback() {
@@ -160,22 +168,45 @@ class Vegan_Cockpit_Admin {
 		echo "<input id='payrexx_api_key' name='vegan_cockpit_setting[payrexx_api_key]' type='text' value='" . esc_attr( $options['payrexx_api_key'] ) . "' />";
 	}
 
+
+	public function wordpress_json_endpoint_html() {
+		$options = get_option( 'vegan_cockpit_setting' );
+		echo "<input id='wordpress_json_endpoint' name='vegan_cockpit_setting[wordpress_json_endpoint]' type='text' value='" . esc_attr( $options['wordpress_json_endpoint'] ) . "' />";
+	}
+
 	#payrexx
 	public function register_get_payrexx_transactions_route() {
-		register_rest_route( 'vegan_cockpit/v1', '/get_payrexx_transactions/(?P<offset>\d+)/(?P<limit>\d+)/(?P<start_date>[^/]+)/(?P<end_date>[^/]+)', array(
+		register_rest_route( 'vegan_cockpit/v1', '/get_payrexx_transactions/(?P<offset>\d+)/(?P<limit>\d+)/(?P<startdate>[^/]+)/(?P<enddate>[^/]+)', array(
 		'methods' => 'GET',
 		'callback' => array( $this, 'get_payrexx_transactions' ),
+		'permission_callback' => function(){
+			return current_user_can( 'manage_options');
+			}
 	) );
 	}
 
 	public function get_payrexx_transactions( $data ) {
+
+
+		//$nonce = $_REQUEST['_wpnonce'];
+		//if (  wp_verify_nonce( $nonce, 'angular-nonce' ) ) {
+		//echo $_REQUEST['_wpnonce'];
+		//if (!wp_verify_nonce( $_REQUEST['_wpnonce'], 'angular-nonce' )) {
+
+		//}
+
+
+		//if ( ! current_user_can( 'manage_options' ) ) {
+			//	return "user cannot";
+		//}
+
 		// $instanceName is a part of the url where you access your payrexx installation.
 		// https://{$instanceName}.payrexx.com
 		$instanceName = 'veganegesellschaftschweiz';
 
 		// $secret is the payrexx secret for the communication between the applications
 		// if you think someone got your secret, just regenerate it in the payrexx administration
-		$secret = '23zkRkQAjcjlJdENtbysNI2lueYRIM';
+		$secret = get_option( 'vegan_cockpit_setting' )["payrexx_api_key"];
 
 		$result = "whut?";
 
@@ -183,20 +214,13 @@ class Vegan_Cockpit_Admin {
 
 		$payrexx = new \Payrexx\Payrexx($instanceName, $secret);
 
-		$start_date = "2022-01-01 00:00:00";
-		$end_date = "2022-06-01 23:59:59";
-
-		if (isset($data["start_date"])) {
-			$start_date = $data["start_date"] . " 00:00:00";
-		}
-
-		if (isset($data["end_date"])) {
-			$end_date = $date["end_date"] . " 23:59:59";
-		}
+		//$start_date = "2022-01-01 00:00:00";
+		$startdate = $data["startdate"] . " 00:00:00";
+		$enddate = $data["enddate"] . " 23:59:59";
 
 		$transaction = new \Payrexx\Models\Request\Transaction();
-		$transaction->setFilterDatetimeUtcGreaterThan(new \DateTime($start_date));
-		$transaction->setFilterDatetimeUtcLessThan(new \DateTime($end_date));
+		$transaction->setFilterDatetimeUtcGreaterThan(new \DateTime($startdate));
+		$transaction->setFilterDatetimeUtcLessThan(new \DateTime($enddate));
 		$transaction->setOffset($data['offset']);
 		$transaction->setLimit($data['limit']);
 
@@ -222,8 +246,8 @@ class Vegan_Cockpit_Admin {
 				unset($product);
 				$single_transaction["products"] = $products_string;
 
-
-				$final_array[$transaction-> getId()] = $single_transaction;
+				$final_array[] = $single_transaction;
+				//$final_array[$transaction-> getId()] = $single_transaction;
 			}
 			unset($transaction);
 		} catch (\Payrexx\PayrexxException $e) {
@@ -238,8 +262,9 @@ class Vegan_Cockpit_Admin {
 		 //   echo $transaction->id;
 		//}
 
-		$array_final_array = array($final_array);
-		return rest_ensure_response($array_final_array);
+		//$array_final_array = array($final_array);
+		return rest_ensure_response($final_array);
+		//return $enddate;
 
 	}
 
