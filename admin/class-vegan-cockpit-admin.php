@@ -238,6 +238,7 @@ class Vegan_Cockpit_Admin {
 				$single_transaction["firstname"] = $transaction-> contact["firstname"];
 				$single_transaction["lastname"] = $transaction-> contact["lastname"];
 				$single_transaction["time"] = $transaction-> getTime();
+				$single_transaction["status"] = $transaction-> getStatus();
 
 				$products_string = "";
 				foreach ($transaction -> invoice["products"] as &$product) {
