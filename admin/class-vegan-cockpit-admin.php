@@ -230,6 +230,11 @@ class Vegan_Cockpit_Admin {
 
 			 foreach ($transactions as &$transaction) {
 				 //var_dump($transaction);
+				 if ($transaction-> getStatus() == "confirmed") {
+
+				} else {
+					continue;
+				}
 
 			 	$single_transaction = [];
 
